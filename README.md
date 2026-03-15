@@ -37,3 +37,8 @@ Create `.env.local`
 
 NEXT_PUBLIC_SUPABASE_URL="https://ijbdmnjvgbuqanetleme.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="sb_publishable_XwFoj58bKSWGA2Cmsm9lGA_Zo1SYR8Y"
+
+## Bonus Features
+- Live typing indicator
+- Summary total of each status
+- Filter Dashborad by status
