@@ -38,6 +38,10 @@ Create `.env.local`
 NEXT_PUBLIC_SUPABASE_URL="https://ijbdmnjvgbuqanetleme.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="sb_publishable_XwFoj58bKSWGA2Cmsm9lGA_Zo1SYR8Y"
 
+## Application Links
+Patient Link: https://realtime-project-nattakan-anu.vercel.app/patient-form
+Staff Link: https://realtime-project-nattakan-anu.vercel.app/staff-monitor
+
 ## Bonus Features
 - Live typing indicator
 - Summary total of each status
