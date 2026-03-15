@@ -2,6 +2,7 @@
 
 import BaseButton from "@/app/components/base/Button/BaseButton";
 import BaseCard from "@/app/components/base/Card/BaseCard";
+import BaseInputSelect from "@/app/components/base/Input/BaseInputSelect";
 import BaseInputText from "@/app/components/base/Input/BaseInputText";
 import Loading from "@/app/components/base/Loading/loading";
 import FormLayout from "@/app/components/layouts/patient/FormLayout";
@@ -24,6 +25,7 @@ export default function Page() {
     register,
     watch,
     handleSubmit,
+    setValue,
     formState: { errors, isDirty },
   } = useForm<PatientForm>({
     defaultValues: PATIENT_FORM_DEFAULT,
@@ -195,22 +197,42 @@ export default function Page() {
           {PATIENT_FORM.map((section, index) => (
             <BaseCard key={index}>
               <PatientFormSection title={section.title}>
-                {section.fields.map((field) => (
-                  <BaseInputText<PatientForm>
-                    key={field.NAME}
-                    label={field.LABEL}
-                    name={field.NAME}
-                    register={register}
-                    rules={{
-                      required: field.VALIDATE_MESSAGE || false,
-                    }}
-                    error={errors[field.NAME] as FieldError}
-                    placeholder={field.PLACEHOLDER}
-                    className={patientLayout(field.NAME)}
-                    onFocus={() => (typingFields.current = field.NAME)}
-                    onBlur={() => (typingFields.current = null)}
-                  />
-                ))}
+                {section.fields.map((field) => {
+                  if (field.TYPE === "text") {
+                    return (
+                      <BaseInputText<PatientForm>
+                        key={field.NAME}
+                        label={field.LABEL}
+                        name={field.NAME}
+                        register={register}
+                        rules={{
+                          required: field.VALIDATE_MESSAGE || false,
+                        }}
+                        error={errors[field.NAME] as FieldError}
+                        placeholder={field.PLACEHOLDER}
+                        className={patientLayout(field.NAME)}
+                        onFocus={() => (typingFields.current = field.NAME)}
+                        onBlur={() => (typingFields.current = null)}
+                      />
+                    );
+                  } else if (field.TYPE === "select") {
+                    return (
+                      <BaseInputSelect
+                        key={field.NAME}
+                        label={field.LABEL}
+                        name={field.NAME}
+                        register={register}
+                        setValue={setValue}
+                        rules={{
+                          required: field.VALIDATE_MESSAGE || false,
+                        }}
+                        error={errors[field.NAME]}
+                        options={field.OPTION}
+                        placeholder={field.PLACEHOLDER}
+                      />
+                    );
+                  }
+                })}
               </PatientFormSection>
             </BaseCard>
           ))}
