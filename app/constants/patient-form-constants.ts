@@ -13,6 +13,7 @@ export const PATIENT_FORM_LABELS = {
     VALIDATE_MESSAGE: "กรุณากรอกชื่อ",
     TYPE: "text",
     OPTION: null,
+    PATTERN: null,
   },
   MNAME: {
     LABEL: "ชื่อกลาง",
@@ -21,6 +22,7 @@ export const PATIENT_FORM_LABELS = {
     VALIDATE_MESSAGE: "",
     TYPE: "text",
     OPTION: null,
+    PATTERN: null,
   },
   LNAME: {
     LABEL: "นามสกุล",
@@ -29,6 +31,7 @@ export const PATIENT_FORM_LABELS = {
     VALIDATE_MESSAGE: "กรุณากรอกนามสกุล",
     TYPE: "text",
     OPTION: null,
+    PATTERN: null,
   },
   DATE_OF_BIRTH: {
     LABEL: "วันเดือนปีเกิด",
@@ -37,6 +40,7 @@ export const PATIENT_FORM_LABELS = {
     VALIDATE_MESSAGE: "กรุณากรอกวันเดือนปีเกิด",
     TYPE: "datePicker",
     OPTION: null,
+    PATTERN: null,
   },
   GENDER: {
     LABEL: "เพศ",
@@ -49,14 +53,19 @@ export const PATIENT_FORM_LABELS = {
       { value: "female", label: "หญิง" },
       { value: "other", label: "อื่น ๆ" },
     ],
+    PATTERN: null,
   },
   PHONE: {
     LABEL: "เบอร์โทรศัพท์",
     NAME: "phone",
-    PLACEHOLDER: "เบอร์โทรศัพท์",
+    PLACEHOLDER: "เบอร์โทรศัพท์ในไทย",
     VALIDATE_MESSAGE: "กรุณากรอกเบอร์โทรศัพท์",
     TYPE: "text",
     OPTION: null,
+    PATTERN: {
+      value: /^(0[6-9]{1})[0-9]{8}$/,
+      message: "รูปแบบเบอร์โทรศัพท์ไม่ถูกต้อง",
+    },
   },
   EMAIL: {
     LABEL: "อีเมล์",
@@ -65,6 +74,10 @@ export const PATIENT_FORM_LABELS = {
     VALIDATE_MESSAGE: "กรุณากรอกอีเมล์",
     TYPE: "text",
     OPTION: null,
+    PATTERN: {
+      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      message: "รูปแบบอีเมลไม่ถูกต้อง",
+    },
   },
   ADDRESS: {
     LABEL: "ที่อยู่",
@@ -73,6 +86,7 @@ export const PATIENT_FORM_LABELS = {
     VALIDATE_MESSAGE: "กรุณากรอกที่อยู่",
     TYPE: "text",
     OPTION: null,
+    PATTERN: null,
   },
   PREFERRED_LANGUAGE: {
     LABEL: "ภาษาที่ใช้สื่อสาร",
@@ -91,6 +105,7 @@ export const PATIENT_FORM_LABELS = {
       { value: "vn", label: "Tiếng Việt (Vietnamese)" },
       { value: "other", label: "อื่น ๆ" },
     ] as const,
+    PATTERN: null,
   },
   NATIONALITY: {
     LABEL: "สัญชาติ",
@@ -112,6 +127,7 @@ export const PATIENT_FORM_LABELS = {
       { value: "indian", label: "Indian" },
       { value: "other", label: "อื่น ๆ" },
     ] as const,
+    PATTERN: null,
   },
   RELIGION: {
     LABEL: "ศาสนา",
@@ -129,6 +145,7 @@ export const PATIENT_FORM_LABELS = {
       { value: "none", label: "ไม่มีศาสนา" },
       { value: "other", label: "อื่น ๆ" },
     ] as const,
+    PATTERN: null,
   },
 
   // ==== ผู้ติดต่อฉุกเฉิน ====
@@ -139,6 +156,7 @@ export const PATIENT_FORM_LABELS = {
     VALIDATE_MESSAGE: "",
     TYPE: "text",
     OPTION: null,
+    PATTERN: null,
   },
   EMERGENCY_MNAME: {
     LABEL: "ชื่อกลาง",
@@ -147,6 +165,7 @@ export const PATIENT_FORM_LABELS = {
     VALIDATE_MESSAGE: "",
     TYPE: "text",
     OPTION: null,
+    PATTERN: null,
   },
   EMERGENCY_LNAME: {
     LABEL: "นามสกุล",
@@ -155,6 +174,7 @@ export const PATIENT_FORM_LABELS = {
     VALIDATE_MESSAGE: "",
     TYPE: "text",
     OPTION: null,
+    PATTERN: null,
   },
   EMERGENCY_RELATION: {
     LABEL: "ความสัมพันธ์",
@@ -174,6 +194,7 @@ export const PATIENT_FORM_LABELS = {
       { value: "guardian", label: "ผู้ปกครอง" },
       { value: "other", label: "อื่น ๆ" },
     ] as const,
+    PATTERN: null,
   },
 } as const;
 

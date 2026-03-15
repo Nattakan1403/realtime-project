@@ -2,6 +2,7 @@
 
 import BaseButton from "@/app/components/base/Button/BaseButton";
 import BaseCard from "@/app/components/base/Card/BaseCard";
+import BaseDatePicker from "@/app/components/base/Input/BaseDatePicker";
 import BaseInputSelect from "@/app/components/base/Input/BaseInputSelect";
 import BaseInputText from "@/app/components/base/Input/BaseInputText";
 import Loading from "@/app/components/base/Loading/loading";
@@ -207,6 +208,7 @@ export default function Page() {
                         register={register}
                         rules={{
                           required: field.VALIDATE_MESSAGE || false,
+                          pattern: field.PATTERN || undefined,
                         }}
                         error={errors[field.NAME] as FieldError}
                         placeholder={field.PLACEHOLDER}
@@ -228,6 +230,20 @@ export default function Page() {
                         }}
                         error={errors[field.NAME]}
                         options={field.OPTION}
+                        placeholder={field.PLACEHOLDER}
+                      />
+                    );
+                  } else {
+                    return (
+                      <BaseDatePicker
+                        key={field.NAME}
+                        label={field.LABEL}
+                        name={field.NAME}
+                        register={register}
+                        rules={{
+                          required: "กรุณาเลือกวันเกิด",
+                        }}
+                        error={errors[field.NAME]}
                         placeholder={field.PLACEHOLDER}
                       />
                     );
