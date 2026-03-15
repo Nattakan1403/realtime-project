@@ -48,10 +48,10 @@ export default function Page() {
     PATIENT_FORM_LABELS.LNAME,
     PATIENT_FORM_LABELS.DATE_OF_BIRTH,
     PATIENT_FORM_LABELS.GENDER,
-    PATIENT_FORM_LABELS.ADDRESS,
+    PATIENT_FORM_LABELS.RELIGION,
     PATIENT_FORM_LABELS.PREFERRED_LANGUAGE,
     PATIENT_FORM_LABELS.NATIONALITY,
-    PATIENT_FORM_LABELS.RELIGION,
+    PATIENT_FORM_LABELS.ADDRESS,
     PATIENT_FORM_LABELS.PHONE,
     PATIENT_FORM_LABELS.EMAIL,
   ];
@@ -76,10 +76,8 @@ export default function Page() {
 
   const patientLayout = (name: string) => {
     switch (name) {
-      case "firstName":
-      case "middleName":
-      case "lastName":
-        return "col-span-2";
+      case "address":
+        return "col-span-1 md:col-span-2";
       default:
         return "col-span-1";
     }

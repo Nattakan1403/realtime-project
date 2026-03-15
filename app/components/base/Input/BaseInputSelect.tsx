@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 import {
   FieldError,
@@ -24,7 +25,6 @@ type BaseInputSelectProps<T extends FieldValues> = {
   rules?: RegisterOptions<T, Path<T>>;
   error?: FieldError;
   options?: readonly Option[] | null;
-  icon?: React.ReactNode;
   placeholder?: string;
 };
 
@@ -36,7 +36,6 @@ export default function BaseInputSelect<T extends FieldValues>({
   rules,
   error,
   options,
-  icon,
   placeholder,
 }: BaseInputSelectProps<T>) {
   const [open, setOpen] = useState(false);
@@ -98,15 +97,10 @@ export default function BaseInputSelect<T extends FieldValues>({
       <input type="hidden" {...register?.(name, rules)} />
 
       <div className="relative">
-        {icon && (
-          <div className="absolute left-3 top-1/2 -translate-y-1/2">{icon}</div>
-        )}
-
         <input
           placeholder={placeholder}
           className={`w-full border rounded-md px-3 py-2 text-sm outline-none
           focus:ring-2 focus:ring-blue-500
-          ${icon ? "pl-9" : ""}
           ${search ? "pr-8" : ""}
           ${error ? "border-red-500" : "border-gray-300"}
           `}
@@ -118,12 +112,22 @@ export default function BaseInputSelect<T extends FieldValues>({
           onFocus={() => setOpen(true)}
         />
 
+        {!search && (
+          <Image
+            className="absolute right-3 top-1/2 -translate-y-1/2"
+            src={"/arrow_drop_down.svg"}
+            alt="arrow-icon"
+            width={16}
+            height={16}
+          />
+        )}
+
         {/* clear button */}
         {search && (
           <button
             type="button"
             onClick={clearValue}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm cursor-pointer"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm cursor-pointer"
           >
             ✕
           </button>
