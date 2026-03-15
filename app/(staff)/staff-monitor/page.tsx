@@ -123,180 +123,193 @@ export default function Page() {
         <CardLayout>
           {filterForms?.map((form) => {
             const realtime = typingData[form.id] || {};
+            const status = realtime.status || form.status;
             return (
               <BaseCard
-                key={form.id}
+                key={`${form.id}-${moreDtailId}`}
                 className={`border-2 p-4 shadow-lg! w-full hover:scale-102 duration-300 transition-all hover:cursor-pointer
-                ${form.id === moreDtailId ? "h-189! md:row-span-2! md:col-span-2 overflow-auto" : "h-92! col-span-1 row-span-1 overflow-hidden"}
-                ${getColorBgStatus(form.status)}`}
+                ${form.id === moreDtailId ? "h-189! md:row-span-2! md:col-span-2" : "h-92! col-span-1 row-span-1"}
+                ${getColorBgStatus(status)}`}
                 onClick={() => onClick(form.id)}
               >
                 <CardHeaderMonitor
-                  status={form.status}
+                  status={status}
                   lastActive={form.last_activity}
                 />
 
-                <FieldDisplay
-                  typing={getTyping(form.status, realtime.typing_field)}
-                  realtimeValue={realtime.first_name}
-                  dbValue={form.first_name}
-                  fieldName={PATIENT_FORM_LABELS.FNAME.NAME}
-                  label={PATIENT_FORM_LABELS.FNAME.LABEL}
-                />
-
-                <FieldDisplay
-                  typing={getTyping(form.status, realtime.typing_field)}
-                  realtimeValue={realtime.middle_name}
-                  dbValue={form.middle_name}
-                  fieldName={PATIENT_FORM_LABELS.MNAME.NAME}
-                  label={PATIENT_FORM_LABELS.MNAME.LABEL}
-                />
-
-                <FieldDisplay
-                  typing={getTyping(form.status, realtime.typing_field)}
-                  realtimeValue={realtime.last_name}
-                  dbValue={form.last_name}
-                  fieldName={PATIENT_FORM_LABELS.LNAME.NAME}
-                  label={PATIENT_FORM_LABELS.LNAME.LABEL}
-                />
-
-                <>
+                <div
+                  className={`flex flex-col gap-4
+                    ${
+                      form.id === moreDtailId
+                        ? "overflow-auto"
+                        : "overflow-hidden"
+                    }`}
+                >
                   <FieldDisplay
-                    typing={getTyping(form.status, realtime.typing_field)}
-                    realtimeValue={getDate(realtime.date_of_birth || "", false)}
-                    dbValue={getDate(form.date_of_birth, false)}
-                    fieldName={PATIENT_FORM_LABELS.DATE_OF_BIRTH.NAME}
-                    label={PATIENT_FORM_LABELS.DATE_OF_BIRTH.LABEL}
+                    typing={getTyping(status, realtime.typing_field)}
+                    realtimeValue={realtime.first_name}
+                    dbValue={form.first_name}
+                    fieldName={PATIENT_FORM_LABELS.FNAME.NAME}
+                    label={PATIENT_FORM_LABELS.FNAME.LABEL}
                   />
 
                   <FieldDisplay
-                    typing={getTyping(form.status, realtime.typing_field)}
-                    realtimeValue={
-                      PATIENT_FORM_LABELS.GENDER.OPTION.find(
-                        (e) => e.value === realtime.gender,
-                      )?.label
-                    }
-                    dbValue={
-                      PATIENT_FORM_LABELS.GENDER.OPTION.find(
-                        (e) => e.value === form.gender,
-                      )?.label
-                    }
-                    fieldName={PATIENT_FORM_LABELS.GENDER.NAME}
-                    label={PATIENT_FORM_LABELS.GENDER.LABEL}
+                    typing={getTyping(status, realtime.typing_field)}
+                    realtimeValue={realtime.middle_name}
+                    dbValue={form.middle_name}
+                    fieldName={PATIENT_FORM_LABELS.MNAME.NAME}
+                    label={PATIENT_FORM_LABELS.MNAME.LABEL}
                   />
 
                   <FieldDisplay
-                    typing={getTyping(form.status, realtime.typing_field)}
-                    realtimeValue={realtime.address}
-                    dbValue={form.address}
-                    fieldName={PATIENT_FORM_LABELS.ADDRESS.NAME}
-                    label={PATIENT_FORM_LABELS.ADDRESS.LABEL}
+                    typing={getTyping(status, realtime.typing_field)}
+                    realtimeValue={realtime.last_name}
+                    dbValue={form.last_name}
+                    fieldName={PATIENT_FORM_LABELS.LNAME.NAME}
+                    label={PATIENT_FORM_LABELS.LNAME.LABEL}
                   />
 
-                  <FieldDisplay
-                    typing={getTyping(form.status, realtime.typing_field)}
-                    realtimeValue={
-                      PATIENT_FORM_LABELS.PREFERRED_LANGUAGE.OPTION.find(
-                        (e) => e.value === realtime.preferred_language,
-                      )?.label
-                    }
-                    dbValue={
-                      PATIENT_FORM_LABELS.PREFERRED_LANGUAGE.OPTION.find(
-                        (e) => e.value === form.preferred_language,
-                      )?.label
-                    }
-                    fieldName={PATIENT_FORM_LABELS.PREFERRED_LANGUAGE.NAME}
-                    label={PATIENT_FORM_LABELS.PREFERRED_LANGUAGE.LABEL}
-                  />
+                  <div className="flex flex-col gap-4">
+                    <FieldDisplay
+                      typing={getTyping(status, realtime.typing_field)}
+                      realtimeValue={getDate(
+                        realtime.date_of_birth || "",
+                        false,
+                      )}
+                      dbValue={getDate(form.date_of_birth, false)}
+                      fieldName={PATIENT_FORM_LABELS.DATE_OF_BIRTH.NAME}
+                      label={PATIENT_FORM_LABELS.DATE_OF_BIRTH.LABEL}
+                    />
 
-                  <FieldDisplay
-                    typing={getTyping(form.status, realtime.typing_field)}
-                    realtimeValue={
-                      PATIENT_FORM_LABELS.NATIONALITY.OPTION.find(
-                        (e) => e.value === realtime.nationality,
-                      )?.label
-                    }
-                    dbValue={
-                      PATIENT_FORM_LABELS.NATIONALITY.OPTION.find(
-                        (e) => e.value === form.nationality,
-                      )?.label
-                    }
-                    fieldName={PATIENT_FORM_LABELS.NATIONALITY.NAME}
-                    label={PATIENT_FORM_LABELS.NATIONALITY.LABEL}
-                  />
+                    <FieldDisplay
+                      typing={getTyping(status, realtime.typing_field)}
+                      realtimeValue={
+                        PATIENT_FORM_LABELS.GENDER.OPTION.find(
+                          (e) => e.value === realtime.gender,
+                        )?.label
+                      }
+                      dbValue={
+                        PATIENT_FORM_LABELS.GENDER.OPTION.find(
+                          (e) => e.value === form.gender,
+                        )?.label
+                      }
+                      fieldName={PATIENT_FORM_LABELS.GENDER.NAME}
+                      label={PATIENT_FORM_LABELS.GENDER.LABEL}
+                    />
 
-                  <FieldDisplay
-                    typing={getTyping(form.status, realtime.typing_field)}
-                    realtimeValue={
-                      PATIENT_FORM_LABELS.RELIGION.OPTION.find(
-                        (e) => e.value === realtime.religion,
-                      )?.label
-                    }
-                    dbValue={
-                      PATIENT_FORM_LABELS.RELIGION.OPTION.find(
-                        (e) => e.value === form.religion,
-                      )?.label
-                    }
-                    fieldName={PATIENT_FORM_LABELS.RELIGION.NAME}
-                    label={PATIENT_FORM_LABELS.RELIGION.LABEL}
-                  />
+                    <FieldDisplay
+                      typing={getTyping(status, realtime.typing_field)}
+                      realtimeValue={realtime.address}
+                      dbValue={form.address}
+                      fieldName={PATIENT_FORM_LABELS.ADDRESS.NAME}
+                      label={PATIENT_FORM_LABELS.ADDRESS.LABEL}
+                    />
 
-                  <FieldDisplay
-                    typing={getTyping(form.status, realtime.typing_field)}
-                    realtimeValue={realtime.phone}
-                    dbValue={form.phone}
-                    fieldName={PATIENT_FORM_LABELS.PHONE.NAME}
-                    label={PATIENT_FORM_LABELS.PHONE.LABEL}
-                  />
+                    <FieldDisplay
+                      typing={getTyping(status, realtime.typing_field)}
+                      realtimeValue={
+                        PATIENT_FORM_LABELS.PREFERRED_LANGUAGE.OPTION.find(
+                          (e) => e.value === realtime.preferred_language,
+                        )?.label
+                      }
+                      dbValue={
+                        PATIENT_FORM_LABELS.PREFERRED_LANGUAGE.OPTION.find(
+                          (e) => e.value === form.preferred_language,
+                        )?.label
+                      }
+                      fieldName={PATIENT_FORM_LABELS.PREFERRED_LANGUAGE.NAME}
+                      label={PATIENT_FORM_LABELS.PREFERRED_LANGUAGE.LABEL}
+                    />
 
-                  <FieldDisplay
-                    typing={getTyping(form.status, realtime.typing_field)}
-                    realtimeValue={realtime.email}
-                    dbValue={form.email}
-                    fieldName={PATIENT_FORM_LABELS.EMAIL.NAME}
-                    label={PATIENT_FORM_LABELS.EMAIL.LABEL}
-                  />
+                    <FieldDisplay
+                      typing={getTyping(status, realtime.typing_field)}
+                      realtimeValue={
+                        PATIENT_FORM_LABELS.NATIONALITY.OPTION.find(
+                          (e) => e.value === realtime.nationality,
+                        )?.label
+                      }
+                      dbValue={
+                        PATIENT_FORM_LABELS.NATIONALITY.OPTION.find(
+                          (e) => e.value === form.nationality,
+                        )?.label
+                      }
+                      fieldName={PATIENT_FORM_LABELS.NATIONALITY.NAME}
+                      label={PATIENT_FORM_LABELS.NATIONALITY.LABEL}
+                    />
 
-                  <FieldDisplay
-                    typing={getTyping(form.status, realtime.typing_field)}
-                    realtimeValue={realtime.emergency_first_name}
-                    dbValue={form.emergency_first_name}
-                    fieldName={PATIENT_FORM_LABELS.EMERGENCY_FNAME.NAME}
-                    label={PATIENT_FORM_LABELS.EMERGENCY_FNAME.LABEL}
-                  />
+                    <FieldDisplay
+                      typing={getTyping(status, realtime.typing_field)}
+                      realtimeValue={
+                        PATIENT_FORM_LABELS.RELIGION.OPTION.find(
+                          (e) => e.value === realtime.religion,
+                        )?.label
+                      }
+                      dbValue={
+                        PATIENT_FORM_LABELS.RELIGION.OPTION.find(
+                          (e) => e.value === form.religion,
+                        )?.label
+                      }
+                      fieldName={PATIENT_FORM_LABELS.RELIGION.NAME}
+                      label={PATIENT_FORM_LABELS.RELIGION.LABEL}
+                    />
 
-                  <FieldDisplay
-                    typing={getTyping(form.status, realtime.typing_field)}
-                    realtimeValue={realtime.emergency_middle_name}
-                    dbValue={form.emergency_middle_name}
-                    fieldName={PATIENT_FORM_LABELS.EMERGENCY_MNAME.NAME}
-                    label={PATIENT_FORM_LABELS.EMERGENCY_MNAME.LABEL}
-                  />
+                    <FieldDisplay
+                      typing={getTyping(status, realtime.typing_field)}
+                      realtimeValue={realtime.phone}
+                      dbValue={form.phone}
+                      fieldName={PATIENT_FORM_LABELS.PHONE.NAME}
+                      label={PATIENT_FORM_LABELS.PHONE.LABEL}
+                    />
 
-                  <FieldDisplay
-                    typing={getTyping(form.status, realtime.typing_field)}
-                    realtimeValue={realtime.emergency_last_name}
-                    dbValue={form.emergency_last_name}
-                    fieldName={PATIENT_FORM_LABELS.EMERGENCY_LNAME.NAME}
-                    label={PATIENT_FORM_LABELS.EMERGENCY_LNAME.LABEL}
-                  />
+                    <FieldDisplay
+                      typing={getTyping(status, realtime.typing_field)}
+                      realtimeValue={realtime.email}
+                      dbValue={form.email}
+                      fieldName={PATIENT_FORM_LABELS.EMAIL.NAME}
+                      label={PATIENT_FORM_LABELS.EMAIL.LABEL}
+                    />
 
-                  <FieldDisplay
-                    typing={getTyping(form.status, realtime.typing_field)}
-                    realtimeValue={
-                      PATIENT_FORM_LABELS.EMERGENCY_RELATION.OPTION.find(
-                        (e) => e.value === realtime.emergency_relation,
-                      )?.label
-                    }
-                    dbValue={
-                      PATIENT_FORM_LABELS.EMERGENCY_RELATION.OPTION.find(
-                        (e) => e.value === form.emergency_relation,
-                      )?.label
-                    }
-                    fieldName={PATIENT_FORM_LABELS.EMERGENCY_RELATION.NAME}
-                    label={PATIENT_FORM_LABELS.EMERGENCY_RELATION.LABEL}
-                  />
-                </>
+                    <FieldDisplay
+                      typing={getTyping(status, realtime.typing_field)}
+                      realtimeValue={realtime.emergency_first_name}
+                      dbValue={form.emergency_first_name}
+                      fieldName={PATIENT_FORM_LABELS.EMERGENCY_FNAME.NAME}
+                      label={PATIENT_FORM_LABELS.EMERGENCY_FNAME.LABEL}
+                    />
+
+                    <FieldDisplay
+                      typing={getTyping(status, realtime.typing_field)}
+                      realtimeValue={realtime.emergency_middle_name}
+                      dbValue={form.emergency_middle_name}
+                      fieldName={PATIENT_FORM_LABELS.EMERGENCY_MNAME.NAME}
+                      label={PATIENT_FORM_LABELS.EMERGENCY_MNAME.LABEL}
+                    />
+
+                    <FieldDisplay
+                      typing={getTyping(status, realtime.typing_field)}
+                      realtimeValue={realtime.emergency_last_name}
+                      dbValue={form.emergency_last_name}
+                      fieldName={PATIENT_FORM_LABELS.EMERGENCY_LNAME.NAME}
+                      label={PATIENT_FORM_LABELS.EMERGENCY_LNAME.LABEL}
+                    />
+
+                    <FieldDisplay
+                      typing={getTyping(status, realtime.typing_field)}
+                      realtimeValue={
+                        PATIENT_FORM_LABELS.EMERGENCY_RELATION.OPTION.find(
+                          (e) => e.value === realtime.emergency_relation,
+                        )?.label
+                      }
+                      dbValue={
+                        PATIENT_FORM_LABELS.EMERGENCY_RELATION.OPTION.find(
+                          (e) => e.value === form.emergency_relation,
+                        )?.label
+                      }
+                      fieldName={PATIENT_FORM_LABELS.EMERGENCY_RELATION.NAME}
+                      label={PATIENT_FORM_LABELS.EMERGENCY_RELATION.LABEL}
+                    />
+                  </div>
+                </div>
               </BaseCard>
             );
           })}
