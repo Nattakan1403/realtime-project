@@ -30,14 +30,14 @@ export default function FieldDisplay({
   if (realtimeValue || dbValue) {
     return (
       <div
-        className={`p-3 rounded-xl border
+        className={`p-3 rounded-xl border w-full
             ${isTping ? "bg-blue-50 border-blue-300  transition-all duration-300 animate-pulse" : "bg-gray-50 border-gray-200"}
         `}
       >
         <p className={`text-sm ${classNameText}`}>{label}</p>
-        <p className={classNameText}>
-          {isTping ? displayTyping : (realtimeValue ?? dbValue)}
-        </p>
+        <div className={classNameText}>
+          {isTping ? displayTyping : realtimeValue || dbValue}
+        </div>
       </div>
     );
   }

@@ -3,6 +3,7 @@ import {
   getColorStatus,
   getColorStatusText,
 } from "@/app/lib/getColor";
+import { getDate } from "@/app/lib/getDate";
 
 interface Props {
   status: string;
@@ -10,11 +11,8 @@ interface Props {
 }
 
 export default function CardHeaderMonitor({ status, lastActive }: Props) {
-  const date = new Date(lastActive);
-  const displayDate = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes().toString().padStart(2, "0")}`;
-
   return (
-    <div className="flex justify-between items-start">
+    <div className="flex justify-between items-start gap-4">
       {/* ==== status ==== */}
       <div
         className={`flex items-center! gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase border ${getColorStatusText(status)} ${getColorBgStatus(status)}`}
@@ -33,7 +31,7 @@ export default function CardHeaderMonitor({ status, lastActive }: Props) {
       {/* ==== last active time ==== */}
       <div className="flex flex-col items-end text-gray-500">
         <p className="text-[12px]">อัปเดตล่าสุดในฐานข้อมูล</p>
-        <p className="text-sm">{displayDate}</p>
+        <p className="text-sm">{getDate(lastActive, true)}</p>
       </div>
     </div>
   );
