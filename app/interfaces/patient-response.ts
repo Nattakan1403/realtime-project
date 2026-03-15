@@ -1,0 +1,23 @@
+export type PatientResponse = {
+  address: string;
+  created_at: string;
+  date_of_birth: string;
+  email: string;
+  emergency_first_name: string;
+  emergency_last_name: string;
+  emergency_middle_name: string;
+  emergency_relation: string;
+  first_name: string;
+  gender: string;
+  id: string;
+  last_activity: string;
+  last_name: string;
+  middle_name: string;
+  nationality: string;
+  phone: string;
+  preferred_language: string;
+  religion: string;
+  status: string;
+  submitted_at: string;
+  typing_field?: string;
+};

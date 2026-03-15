@@ -3,6 +3,7 @@
 import BaseButton from "@/app/components/base/Button/BaseButton";
 import BaseCard from "@/app/components/base/Card/BaseCard";
 import BaseInputText from "@/app/components/base/Input/BaseInputText";
+import Loading from "@/app/components/base/Loading/loading";
 import FormLayout from "@/app/components/layouts/patient/FormLayout";
 import PatientNavbar from "@/app/components/layouts/patient/PatientNavbar";
 import PatientFormSection from "@/app/components/sections/PatientFormSection";
@@ -12,20 +13,31 @@ import {
   PATIENT_FORM_LABELS,
 } from "@/app/constants/patient-form-constants";
 import { PatientForm } from "@/app/interfaces/patient-form";
+import { supabase } from "@/app/lib/supabase";
+import { updatePatientForm } from "@/app/lib/supabase-service";
+import { RealtimeChannel } from "@supabase/supabase-js";
+import { useEffect, useRef, useState } from "react";
 import { FieldError, useForm } from "react-hook-form";
 
 export default function Page() {
   const {
     register,
+    watch,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<PatientForm>({
     defaultValues: PATIENT_FORM_DEFAULT,
   });
 
-  const onSubmit = (data: PatientForm) => {
-    console.log("PATIENT DATA:", data);
-  };
+  const [loading, setLoading] = useState(false);
+
+  const values = watch();
+
+  const channelRef = useRef<RealtimeChannel | null>(null);
+  const formIdRef = useRef<string | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const creatingRef = useRef(false);
+  const typingFields = useRef<string | null>(null);
 
   const PATIENT_INFO_FIELDS = [
     PATIENT_FORM_LABELS.FNAME,
@@ -70,37 +82,142 @@ export default function Page() {
     }
   };
 
+  /* ==== create channel when first render ==== */
+  useEffect(() => {
+    channelRef.current = supabase.channel("patient-typing");
+    channelRef.current.subscribe();
+
+    return () => {
+      if (channelRef.current) supabase.removeChannel(channelRef.current);
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isDirty) return;
+    handleTyping();
+  }, [values, isDirty]);
+
+  const handleTyping = async () => {
+    // create form first time
+    if (!formIdRef.current && !creatingRef.current) {
+      creatingRef.current = true;
+      await onCreate();
+    }
+
+    if (!formIdRef.current) return;
+
+    // realtime typing
+    onRealtimeTyping();
+
+    // debounce autosave
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    timerRef.current = setTimeout(() => {
+      onAutoSave();
+    }, 5000);
+  };
+
+  const onCreate = async () => {
+    const { data } = await supabase
+      .from("patient_forms")
+      .insert({ status: "active" })
+      .select()
+      .single();
+
+    formIdRef.current = data.id;
+  };
+
+  const onRealtimeTyping = () => {
+    if (channelRef.current) {
+      channelRef.current.send({
+        type: "broadcast",
+        event: "typing",
+        payload: {
+          formId: formIdRef.current,
+          values: {
+            first_name: values.firstName,
+            middle_name: values.middleName,
+            last_name: values.lastName,
+            date_of_birth: values.dateOfBirth || null,
+            gender: values.gender,
+            phone: values.phone,
+            email: values.email,
+            address: values.address,
+            preferred_language: values.preferredLanguage,
+            nationality: values.nationality,
+            religion: values.religion,
+            emergency_first_name: values.emergencyFirstName,
+            emergency_middle_name: values.emergencyMiddleName,
+            emergency_last_name: values.emergencyLastName,
+            emergency_relation: values.emergencyRelation,
+            typing_field: typingFields.current,
+            status: "active",
+          },
+        },
+      });
+    }
+  };
+
+  const onAutoSave = async () => {
+    const id = formIdRef.current;
+    if (!id) return;
+    const status = "active";
+    await updatePatientForm({ id, values, status });
+  };
+
+  const onSubmit = async (data: PatientForm) => {
+    const id = formIdRef.current;
+    if (!id) return;
+    const status = "submitted";
+    setLoading(true);
+    await updatePatientForm({ id, values: data, status });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
+
   return (
     <main>
       <PatientNavbar pageTitle={PAGE_TITLE.PATIENT_FORM} />
 
-      <FormLayout onSubmit={handleSubmit(onSubmit)}>
-        {PATIENT_FORM.map((section, index) => (
-          <BaseCard key={index}>
-            <PatientFormSection title={section.title}>
-              {section.fields.map((field) => (
-                <BaseInputText<PatientForm>
-                  key={field.NAME}
-                  label={field.LABEL}
-                  name={field.NAME}
-                  register={register}
-                  rules={{
-                    required: {
-                      value: field.VALIDATE_MESSAGE ? true : false,
-                      message: field.VALIDATE_MESSAGE,
-                    },
-                  }}
-                  error={errors[field.NAME] as FieldError}
-                  placeholder={field.PLACEHOLDER}
-                  className={patientLayout(field.NAME)}
-                />
-              ))}
-            </PatientFormSection>
-          </BaseCard>
-        ))}
+      {loading && <Loading />}
+      {!loading && (
+        <FormLayout onSubmit={handleSubmit(onSubmit)}>
+          {PATIENT_FORM.map((section, index) => (
+            <BaseCard key={index}>
+              <PatientFormSection title={section.title}>
+                {section.fields.map((field) => (
+                  <BaseInputText<PatientForm>
+                    key={field.NAME}
+                    label={field.LABEL}
+                    name={field.NAME}
+                    register={register}
+                    rules={{
+                      required: field.VALIDATE_MESSAGE || false,
+                    }}
+                    error={errors[field.NAME] as FieldError}
+                    placeholder={field.PLACEHOLDER}
+                    className={patientLayout(field.NAME)}
+                    onFocus={() => (typingFields.current = field.NAME)}
+                    onBlur={() => (typingFields.current = null)}
+                  />
+                ))}
+              </PatientFormSection>
+            </BaseCard>
+          ))}
 
-        <BaseButton type="submit">ส่งข้อมูล</BaseButton>
-      </FormLayout>
+          <BaseButton type="submit">ส่งข้อมูล</BaseButton>
+        </FormLayout>
+      )}
     </main>
   );
 }

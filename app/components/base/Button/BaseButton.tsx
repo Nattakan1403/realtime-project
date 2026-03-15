@@ -15,7 +15,7 @@ export default function BaseButton({
     <button
       type={type}
       onClick={onClick}
-      className={`p-4 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 transition ${className ?? ""}`}
+      className={`p-4 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 transition hover:cursor-pointer ${className ?? ""}`}
     >
       {children}
     </button>

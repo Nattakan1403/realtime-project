@@ -14,4 +14,5 @@ export type PatientForm = {
   emergencyMiddleName: string;
   emergencyLastName: string;
   emergencyRelation: string;
+  status?: string;
 };
